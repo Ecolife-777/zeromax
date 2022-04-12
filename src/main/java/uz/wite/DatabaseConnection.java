@@ -154,4 +154,41 @@ public class DatabaseConnection {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
         preparedStatement.execute();
     }
+
+    public void deleteUser(String name) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, username, password);
+        Ads ad = getAdByName(name, connection);
+        String query = "delete from users where file_id = '" + ad.getFileId() + "'";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.execute();
+    }
+
+    public Ads getAdByName(String name, Connection connection) throws SQLException {
+        String query = "SELECT * FROM ads " +
+                "where name = '" + name + "'";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        Ads ads = new Ads();
+        while (resultSet.next()) {
+            ads.setName(resultSet.getString(2));
+            ads.setDescription(resultSet.getString(3));
+            ads.setFileId(resultSet.getString(4));
+        }
+        return ads;
+    }
+
+    public Ads getAdByFileId(String fileId) throws SQLException {
+        Connection connection = DriverManager.getConnection(url, username, password);
+        String query = "SELECT * FROM ads " +
+                "where file_id = '" + fileId + "'";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        Ads ads = new Ads();
+        while (resultSet.next()) {
+            ads.setName(resultSet.getString(2));
+            ads.setDescription(resultSet.getString(3));
+            ads.setFileId(resultSet.getString(4));
+        }
+        return ads;
+    }
 }

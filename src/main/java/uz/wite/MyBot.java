@@ -362,6 +362,7 @@ public class MyBot extends TelegramLongPollingBot {
                     deleteLink.put(String.valueOf(chat_id), 0);
                 }
                 else if (deleteAds.size() != 0 && deleteAds.get(String.valueOf(chat_id)) == 1){
+                    connection.deleteUser(call_data);
                     connection.deleteAd(call_data);
                     new_message.setText("reklama ochirildi");
                     deleteAds.put(String.valueOf(chat_id), 0);
@@ -628,10 +629,10 @@ public class MyBot extends TelegramLongPollingBot {
             message.setChatId(String.valueOf(chatId));
             message.setCaption(user.get(i).getUsername() + "\n" + user.get(i).getPhoneNumber());
             message.setPhoto(new InputFile(user.get(i).getScreenId()));
-
+            Ads ad = connection.getAdByFileId(user.get(i).getFileId());
             SendPhoto message1 = new SendPhoto();
             message1.setChatId(String.valueOf(chatId));
-            message1.setCaption(user.get(i).getAdName() + "\n" + user.get(i).getDescription());
+            message1.setCaption(ad.getName() + "\n" + user.get(i).getDescription());
             message1.setPhoto(new InputFile(user.get(i).getFileId()));
             try {
                 execute(message);
